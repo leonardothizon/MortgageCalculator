@@ -1,0 +1,40 @@
+@mixin border-radius($pixel...) {
+  border-radius: $pixel;
+  -moz-border-radius: $pixel;
+  -webkit-border-radius: $pixel;
+}
+
+@mixin border-radii($topleft, $topright, $bottomright, $bottomleft) {
+	border-top-left-radius: $topleft;
+	border-top-right-radius: $topright;
+	border-bottom-right-radius: $bottomright;
+	border-bottom-left-radius: $bottomleft;
+	-webkit-border-top-left-radius: $topleft;
+	-webkit-border-top-right-radius: $topright;
+	-webkit-border-bottom-right-radius: $bottomright;
+	-webkit-border-bottom-left-radius: $bottomleft;
+	-moz-border-radius-topleft: $topleft;
+	-moz-border-radius-topright: $topright;
+	-moz-border-radius-bottomright: $bottomright;
+	-moz-border-radius-bottomleft: $bottomleft;
+}
+
+@mixin box-shadow($value) {
+  -webkit-box-shadow: $value;
+  -moz-box-shadow: $value;
+  box-shadow: $value;
+}
+
+@mixin transition($x...){
+	-webkit-transition: $x;
+	-moz-transition: $x;
+	-ms-transition: $x;
+	-o-transition: $x;
+	transition: $x;
+}
+
+@mixin responsive_mobile() {
+	@media only screen and (max-width: 767px) {
+		@content;
+	}
+}

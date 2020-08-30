@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Consumer Affairs - Mortgage Calculator</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel="stylesheet" type="text/css" href="src/css/style.css" />    
+</head>
+<body>
+
+  <div id="page">
+      
+    <h1>Mortgage Calculator</h1>
+
+    <div id="container">
+          
+      <section class="calculator">
+
+        <p class="calculator__instruction">Change values to calculate your results</p>
+
+        <form onsubmit="return false">
+
+          <div class="calculator__item">
+            <label class="calculator__label">Years of mortgage</label>
+            <div class="form-range">
+              <span class="form-range__span">1</span>
+              <input class="form-range__input-range" id="years-mortgage" name="years-mortgage" type="range" value="20" min="1" max="40" />
+              <span class="form-range__span">40</span>
+              <input class="calculator__input--text form-range__input-value" id="years-mortgage-value" type="number" value="20" />
+            </div>
+          </div>
+
+          <div class="calculator__item">
+            <label class="calculator__label">Rate of interest (%)</label>
+            <div class="form-range">
+              <span class="form-range__span">0.1</span>
+              <input class="form-range__input-range" id="rate-interest" name="rate-interest" type="range" value="5" min="0.1" max="10" step=".1" />
+              <span class="form-range__span">10</span>
+              <input class="calculator__input--text form-range__input-value" id="rate-interest-value" type="number" value="5.0" />
+            </div>
+          </div>
+
+          <div class="calculator__item">
+            <label class="calculator__label">Loan Amount</label>
+            <div class="calculator__input-prepend input-prepend">
+              <span class="input-prepend__span">$</span>
+              <input id="loan-amount-input" class="calculator__input--text input-prepend__input" type="number" value="30" />
+            </div>
+            <span class="calculator__input-error"></span>
+          </div>
+
+          <div class="calculator__item--group ">
+            <div class="calculator__item--group-item">
+              <label class="calculator__label">Annual Tax</label>
+              <div class="calculator__input-prepend input-prepend">
+                <span class="input-prepend__span">$</span>
+                <input id="annual-tax-input" class="calculator__input--text input-prepend__input" type="number" value="1000" />
+              </div>
+              <span class="calculator__input-error"></span>
+            </div>
+            <div class="calculator__item--group-item">
+              <label class="calculator__label">Annual Insurance</label>
+              <div class="calculator__input-prepend input-prepend">
+                <span class="input-prepend__span">$</span>
+                <input id="annual-insurance-input" class="calculator__input--text input-prepend__input" type="number" value="300" />
+              </div>
+              <span class="calculator__input-error"></span>
+            </div>
+          </div>
+
+          <input id="calculate-btn" class="calculator__button" type="submit" value="Calculate" />
+        
+        </form>
+
+      </section>
+          
+      <section id="results" class="results">
+
+        <p class="results__title">Your results</p>
+
+        <div class="results__item">
+          <label class="results__item-label">Principle & Interest</label>
+          <span id="result-principle-interest" class="results__item-value">$ - -</span>
+        </div>
+
+        <div class="results__item">
+          <label class="results__item-label">Tax</label>
+          <span id="result-tax" class="results__item-value">$ - -</span>
+        </div>
+
+        <div class="results__item">
+          <label class="results__item-label">Insurance</label>
+          <span id="result-insurance" class="results__item-value">$ - -</span>
+        </div>
+
+        <div class="results__item results__item--total">
+          <label class="results__item-label results__item-label--total">Total Monthly Payment</label>
+          <span id="result-monthly-payment" class="results__item-value results__item-value--total">$ - -</span>
+        </div>
+
+      </section>
+          
+    </div>
+
+  </div>
+  <script type="module" src='src/js/main.js'></script> 
+</body>
+</html>
