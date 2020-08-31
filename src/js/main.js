@@ -7,10 +7,10 @@ import { showResults, CalculatorDOMElements, validateMandatoryFields, updateRang
  * Get the instance of the calculator class - MortgageCalculator.
  * @returns {function():MortgageCalculator} Instance of the calculator
  */
-let getCalculator = function () {
+let getCalculator = (function () {
   let calc = null;
   return () => calc || new MortgageCalculator();
-}
+})();
 
 /**
  * Creates the listeners for DOM Elements and add its behaviors
@@ -49,8 +49,7 @@ const calculate = function () {
     return;
   }
 
-  let calc = getCalculator()();
-
+  let calc = getCalculator();
   calc.yearsOfMortgage = CalculatorDOMElements.yearsMortgageRangeEl.value;
   calc.interestRate = CalculatorDOMElements.interestRateRangeEl.value;
   calc.loanAmount = CalculatorDOMElements.loanAmountValueEl.value;
