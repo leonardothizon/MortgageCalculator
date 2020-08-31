@@ -22,10 +22,10 @@ class MortgageCalculator {
    * @return  {Object} Object containing the result of the calculation.
    */
   calculate() {
-    let principleAndInterest = this.calculatePrincipleAndInterest();
-    let tax = this.calculateTax();
-    let insurance = this.calculateInsurance();
-    let totalMonthlyPayment = this.calculateMonthlyPayment(principleAndInterest, tax, insurance);
+    const principleAndInterest = this.calculatePrincipleAndInterest();
+    const tax = this.calculateTax();
+    const insurance = this.calculateInsurance();
+    const totalMonthlyPayment = this.calculateMonthlyPayment(principleAndInterest, tax, insurance);
     return {
       principleAndInterest: principleAndInterest,
       tax: tax,
@@ -39,7 +39,7 @@ class MortgageCalculator {
    * @return {number} Principle & Interest
    */
   calculatePrincipleAndInterest() {
-    let interestRateCalc = (this.interestRate / 100) / 12;
+    const interestRateCalc = (this.interestRate / 100) / 12;
     return (interestRateCalc) * this.loanAmount / (1-Math.pow((1 + (interestRateCalc)), - this.yearsOfMortgage*12));
   }
 

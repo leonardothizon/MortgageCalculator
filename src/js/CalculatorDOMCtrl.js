@@ -7,7 +7,7 @@
 /**
  *  Map with Calculator DOM Elements that will be accessed.
  */
-const CalculatorDOMElements = {
+const calculatorDOMElements = {
   yearsMortgageRangeEl: document.getElementById("years-mortgage"),
   yearsMortgageValueEl: document.getElementById("years-mortgage-value"),
   interestRateRangeEl: document.getElementById("rate-interest"),
@@ -21,7 +21,7 @@ const CalculatorDOMElements = {
 /**
  *  Map with Result section DOM Elements that will be accessed.
  */
-const ResultDOMElements = {
+const _resultDOMElements = {
   resultsSection: document.getElementById('results'),
   principleAndInterestResultEl: document.getElementById('result-principle-interest'),
   taxResultEl: document.getElementById('result-tax'),
@@ -35,30 +35,38 @@ const ResultDOMElements = {
  *  
  *  @return {NodeList} List containing all input fields which value is required.
  */
-const getRequiredFields = function () {
+const _getRequiredFields = function () {
   let requiredFields = null;
-  return () => requiredFields || document.querySelectorAll('#container .calculator__input--required');
+  return () => {
+    if (requiredFields === null) {
+      requiredFields = document.querySelectorAll('#container .calculator__input--required');
+    }
+    return requiredFields;
+  };
 }
 
 /**
- * Take the result of mortgage calculation as parameter and set the values in its respectives DOM elements.
- * Make the Result Section visible.
- * @param {Object} results Object containing the result of mortgage calculation.
+ * Makes the result section visible and fill it with given arguments.
+ * 
+ * @param {number} principleAndInterest 
+ * @param {number} tax 
+ * @param {number} insurance 
+ * @param {number} totalMonthlyPayment 
  */
-const showResults = function (results) {
-  ResultDOMElements.principleAndInterestResultEl.innerHTML = '$ ' + results.principleAndInterest.toFixed(2);
-  ResultDOMElements.taxResultEl.innerHTML = '$ ' + results.tax.toFixed(2);
-  ResultDOMElements.insuranceResulEl.innerHTML = '$ ' + results.insurance.toFixed(2);
-  ResultDOMElements.monthlyPaymentResultEl.innerHTML = '$ ' + results.totalMonthlyPayment.toFixed(2);
-  ResultDOMElements.resultsSection.classList.add('show');
-  ResultDOMElements.resultsSection.scrollIntoView({ behavior: 'smooth' });  
+const showResults = function (principleAndInterest, tax, insurance, totalMonthlyPayment) {
+  _resultDOMElements.principleAndInterestResultEl.innerHTML = '$ ' + principleAndInterest.toFixed(2);
+  _resultDOMElements.taxResultEl.innerHTML = '$ ' + tax.toFixed(2);
+  _resultDOMElements.insuranceResulEl.innerHTML = '$ ' + insurance.toFixed(2);
+  _resultDOMElements.monthlyPaymentResultEl.innerHTML = '$ ' + totalMonthlyPayment.toFixed(2);
+  _resultDOMElements.resultsSection.classList.add('show');
+  _resultDOMElements.resultsSection.scrollIntoView({ behavior: 'smooth' });  
 }
 
 /**
  * Display a error message and add a error modifier to its parent node.
  * @param {Element} element DOM element to display error.
  */
-const displayMandatoryElementError = function (element) {
+const _displayMandatoryElementError = function (element) {
   let labelValue = element.parentNode.parentNode.querySelector('.calculator__label')?.innerHTML;
   element.parentNode.classList.add('input-prepend--error');
   let labelElement = document.createElement('span');
@@ -71,7 +79,7 @@ const displayMandatoryElementError = function (element) {
  * Removes the error message and removes the error modifier from its parent node.
  * @param {Element} element DOM element to remove error.
  */
-const removeMandatoryElementError = function (element) {
+const _removeMandatoryElementError = function (element) {
   element.parentNode.classList.remove('input-prepend--error');
   element.parentNode.parentNode.querySelector('.calculator__input-error')?.remove();
 }
@@ -82,11 +90,11 @@ const removeMandatoryElementError = function (element) {
  */
 const validateMandatoryFields = function () {
   let isValid = true;
-  let requiredFields = getRequiredFields();
+  const requiredFields = _getRequiredFields();
   requiredFields().forEach(element => {
-    removeMandatoryElementError(element);
+    _removeMandatoryElementError(element);
     if (element.value === '') {
-      displayMandatoryElementError(element);
+      _displayMandatoryElementError(element);
       isValid = false;
     }
   });
@@ -105,7 +113,7 @@ const updateRangeElementStyle = function (element, value) {
 
 export {
   showResults,
-  CalculatorDOMElements,
+  calculatorDOMElements,
   validateMandatoryFields,
   updateRangeElementStyle
 }
