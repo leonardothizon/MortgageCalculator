@@ -1,54 +1,64 @@
 'use strict'
 
 import  MortgageCalculator from './MortgageCalculator.js';
-import { showResults, DOMElements, validateRequiredFields, updateRangeElementStyle } from './CalculatorDOMCtrl.js';
+import { showResults, CalculatorDOMElements, validateMandatoryFields, updateRangeElementStyle } from './CalculatorDOMCtrl.js';
 
-let calc = null;
+/**
+ * Get the instance of the calculator class - MortgageCalculator.
+ * @returns {function():MortgageCalculator} Instance of the calculator
+ */
+let getCalculator = function () {
+  let calc = null;
+  return () => calc || new MortgageCalculator();
+}
 
+/**
+ * Creates the listeners for DOM Elements and add its behaviors
+ */
 const createListeners = function () {
-  DOMElements.yearsMortgageRangeEl.addEventListener('input', function () {
+  CalculatorDOMElements.yearsMortgageRangeEl.addEventListener('input', function () {
     updateRangeElementStyle(this, this.value);
-    DOMElements.yearsMortgageValueEl.value = this.value;
+    CalculatorDOMElements.yearsMortgageValueEl.value = this.value;
   });
     
-  DOMElements.interestRateRangeEl.addEventListener('input', function () {
+  CalculatorDOMElements.interestRateRangeEl.addEventListener('input', function () {
     updateRangeElementStyle(this, this.value);
-    DOMElements.interestRateValueEl.value = Number(this.value).toFixed(1);
+    CalculatorDOMElements.interestRateValueEl.value = Number(this.value).toFixed(1);
   });
   
-  DOMElements.yearsMortgageValueEl.addEventListener('input', function () {
-    DOMElements.yearsMortgageRangeEl.value = this.value;
-    updateRangeElementStyle(DOMElements.yearsMortgageRangeEl, this.value);
+  CalculatorDOMElements.yearsMortgageValueEl.addEventListener('input', function () {
+    CalculatorDOMElements.yearsMortgageRangeEl.value = this.value;
+    updateRangeElementStyle(CalculatorDOMElements.yearsMortgageRangeEl, this.value);
   });
   
-  DOMElements.interestRateValueEl.addEventListener('input', function () {
-    DOMElements.interestRateRangeEl.value = this.value;
-    updateRangeElementStyle(DOMElements.interestRateRangeEl, this.value);
+  CalculatorDOMElements.interestRateValueEl.addEventListener('input', function () {
+    CalculatorDOMElements.interestRateRangeEl.value = this.value;
+    updateRangeElementStyle(CalculatorDOMElements.interestRateRangeEl, this.value);
   });
   
-  DOMElements.calculateBtn.addEventListener('click', function () {
+  CalculatorDOMElements.calculateBtn.addEventListener('click', function () {
     calculate();
   });
 }
 
+/**
+ * Validate data and show the results.
+ */
 const calculate = function () {
-  if (!validateRequiredFields()) {
+  if (!validateMandatoryFields()) {
     return;
   }
 
-  if (calc === null) {
-    calc = new MortgageCalculator();
-  }
+  let calc = getCalculator()();
 
-  calc.yearsOfMortgage = DOMElements.yearsMortgageRangeEl.value;
-  calc.interestRate = DOMElements.interestRateRangeEl.value;
-  calc.loanAmount = DOMElements.loanAmountValueEl.value;
-  calc.annualTax = DOMElements.annualTaxValueEl.value;
-  calc.annualInsurance = DOMElements.annualInsuranceValueEl.value;  
+  calc.yearsOfMortgage = CalculatorDOMElements.yearsMortgageRangeEl.value;
+  calc.interestRate = CalculatorDOMElements.interestRateRangeEl.value;
+  calc.loanAmount = CalculatorDOMElements.loanAmountValueEl.value;
+  calc.annualTax = CalculatorDOMElements.annualTaxValueEl.value;
+  calc.annualInsurance = CalculatorDOMElements.annualInsuranceValueEl.value;  
   let result = calc.calculate();
   showResults(result);
-  DOMElements.resultsSection.scrollIntoView({ behavior: 'smooth' });
-  DOMElements.calculateBtn.value = 'Recalculate';
+  CalculatorDOMElements.calculateBtn.value = 'Recalculate';
 }
 
 createListeners();

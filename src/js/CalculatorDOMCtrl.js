@@ -1,12 +1,13 @@
 'use strict'
+/**
+ * Responsible for DOM Elements control.
+ * @module CalculatorDOMCtrl
+ */
 
-const principleAndInterestResultEl = document.getElementById('result-principle-interest');
-const taxResultEl = document.getElementById('result-tax');
-const insuranceResulEl = document.getElementById('result-insurance');
-const monthlyPaymentResultEl = document.getElementById('result-monthly-payment');
-
-// Change to query DOM only when it is needed. Unecessary load at page initialization
-const DOMElements = {
+/**
+ *  Map with Calculator DOM Elements that will be accessed.
+ */
+const CalculatorDOMElements = {
   yearsMortgageRangeEl: document.getElementById("years-mortgage"),
   yearsMortgageValueEl: document.getElementById("years-mortgage-value"),
   interestRateRangeEl: document.getElementById("rate-interest"),
@@ -15,61 +16,96 @@ const DOMElements = {
   annualTaxValueEl: document.getElementById("annual-tax-input"),
   annualInsuranceValueEl: document.getElementById("annual-insurance-input"),
   calculateBtn: document.getElementById('calculate-btn'),
-  resultsSection: document.getElementById('results')
 }
 
+/**
+ *  Map with Result section DOM Elements that will be accessed.
+ */
+const ResultDOMElements = {
+  resultsSection: document.getElementById('results'),
+  principleAndInterestResultEl: document.getElementById('result-principle-interest'),
+  taxResultEl: document.getElementById('result-tax'),
+  insuranceResulEl: document.getElementById('result-insurance'),
+  monthlyPaymentResultEl: document.getElementById('result-monthly-payment'),
+}
+
+/**
+ *  Retrieves all input element containing the --required modifier. 
+ *  It uses closure to protect the element and make sure to be queried only once.
+ *  
+ *  @return {NodeList} List containing all input fields which value is required.
+ */
+const getRequiredFields = function () {
+  let requiredFields = null;
+  return () => requiredFields || document.querySelectorAll('#container .calculator__input--required');
+}
+
+/**
+ * Take the result of mortgage calculation as parameter and set the values in its respectives DOM elements.
+ * Make the Result Section visible.
+ * @param {Object} results Object containing the result of mortgage calculation.
+ */
 const showResults = function (results) {
-  principleAndInterestResultEl.innerHTML = '$ ' + results.principleAndInterest.toFixed(2);
-  taxResultEl.innerHTML = '$ ' + results.tax.toFixed(2);
-  insuranceResulEl.innerHTML = '$ ' + results.insurance.toFixed(2);
-  monthlyPaymentResultEl.innerHTML = '$ ' + results.totalMonthlyPayment.toFixed(2);
-  DOMElements.resultsSection.classList.add('show');
+  ResultDOMElements.principleAndInterestResultEl.innerHTML = '$ ' + results.principleAndInterest.toFixed(2);
+  ResultDOMElements.taxResultEl.innerHTML = '$ ' + results.tax.toFixed(2);
+  ResultDOMElements.insuranceResulEl.innerHTML = '$ ' + results.insurance.toFixed(2);
+  ResultDOMElements.monthlyPaymentResultEl.innerHTML = '$ ' + results.totalMonthlyPayment.toFixed(2);
+  ResultDOMElements.resultsSection.classList.add('show');
+  ResultDOMElements.resultsSection.scrollIntoView({ behavior: 'smooth' });  
 }
 
-const validateRequiredFields = function () {
+/**
+ * Display a error message and add a error modifier to its parent node.
+ * @param {Element} element DOM element to display error.
+ */
+const displayMandatoryElementError = function (element) {
+  let labelValue = element.parentNode.parentNode.querySelector('.calculator__label')?.innerHTML;
+  element.parentNode.classList.add('input-prepend--error');
+  let labelElement = document.createElement('span');
+  labelElement.className = 'calculator__input-error';
+  labelElement.innerHTML = labelValue + ' is mandatory';
+  element.parentNode.insertAdjacentElement('afterend', labelElement);
+}
+
+/**
+ * Removes the error message and removes the error modifier from its parent node.
+ * @param {Element} element DOM element to remove error.
+ */
+const removeMandatoryElementError = function (element) {
+  element.parentNode.classList.remove('input-prepend--error');
+  element.parentNode.parentNode.querySelector('.calculator__input-error')?.remove();
+}
+
+/**
+ * Validate if the mandatory fields are filled and display errors if necessary.
+ * @returns {Boolean} True if all mandatory fields are filled. False if not.
+ */
+const validateMandatoryFields = function () {
   let isValid = true;
-
-  if (DOMElements.loanAmountValueEl.value === '') {
-    DOMElements.loanAmountValueEl.parentNode.classList.add('input-prepend--error');
-    DOMElements.loanAmountValueEl.parentNode.nextElementSibling.style.display = 'inline-block';
-    DOMElements.loanAmountValueEl.parentNode.nextElementSibling.innerHTML = 'Loan Amount is mandatory';
-    isValid = false;
-  } else {
-    DOMElements.loanAmountValueEl.parentNode.classList.remove('input-prepend--error');
-    DOMElements.loanAmountValueEl.parentNode.nextElementSibling.style.display = 'none';
-  }
-
-  if (DOMElements.annualTaxValueEl.value === '') {
-    DOMElements.annualTaxValueEl.parentNode.classList.add('input-prepend--error');
-    DOMElements.annualTaxValueEl.parentNode.nextElementSibling.style.display = 'inline-block';
-    DOMElements.annualTaxValueEl.parentNode.nextElementSibling.innerHTML = 'Annual Tax is mandatory';
-    isValid = false;
-  } else {
-    DOMElements.annualTaxValueEl.parentNode.classList.remove('input-prepend--error');
-    DOMElements.annualTaxValueEl.parentNode.nextElementSibling.style.display = 'none';
-  }
-
-  if (DOMElements.annualInsuranceValueEl.value === '') {
-    DOMElements.annualInsuranceValueEl.parentNode.classList.add('input-prepend--error');
-    DOMElements.annualInsuranceValueEl.parentNode.nextElementSibling.style.display = 'inline-block';
-    DOMElements.annualInsuranceValueEl.parentNode.nextElementSibling.innerHTML = 'Annual Insurance is mandatory';
-    isValid = false;
-  } else {
-    DOMElements.annualInsuranceValueEl.parentNode.classList.remove('input-prepend--error');
-    DOMElements.annualInsuranceValueEl.parentNode.nextElementSibling.style.display = 'none';
-  }
-
+  let requiredFields = getRequiredFields();
+  requiredFields().forEach(element => {
+    removeMandatoryElementError(element);
+    if (element.value === '') {
+      displayMandatoryElementError(element);
+      isValid = false;
+    }
+  });
   return isValid;
 }
 
-const updateRangeElementStyle = function (el, value) {
-  let percValue = value * 100 / el.max;
-  el.style.background = 'linear-gradient(to right, #000 0%, #000 ' + percValue + '%, #ccc ' + value + '%, #ccc 100%)';
+/**
+ * Update range input's background according to given value.
+ * @param {Element} element DOM input range element
+ * @param {number} value Value to be set.
+ */
+const updateRangeElementStyle = function (element, value) {
+  let percValue = value * 100 / element.max;
+  element.style.background = 'linear-gradient(to right, #000 0%, #000 ' + percValue + '%, #ccc ' + value + '%, #ccc 100%)';
 }
 
 export {
   showResults,
-  DOMElements,
-  validateRequiredFields,
+  CalculatorDOMElements,
+  validateMandatoryFields,
   updateRangeElementStyle
 }

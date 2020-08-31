@@ -19,7 +19,7 @@
 
         <p class="calculator__instruction">Change values to calculate your results</p>
 
-        <form onsubmit="return false">
+        <form onsubmit="return false" novalidate>
 
           <div class="calculator__item">
             <label class="calculator__label">Years of mortgage</label>
@@ -45,9 +45,9 @@
             <label class="calculator__label">Loan Amount</label>
             <div class="calculator__input-prepend input-prepend">
               <span class="input-prepend__span">$</span>
-              <input id="loan-amount-input" class="calculator__input--text input-prepend__input" type="number" value="30" />
+              <input id="loan-amount-input" class="calculator__input--text calculator__input--required input-prepend__input" type="number" value="30" />
             </div>
-            <span class="calculator__input-error"></span>
+            <!-- <span class="calculator__input-error"></span> -->
           </div>
 
           <div class="calculator__item--group ">
@@ -55,17 +55,17 @@
               <label class="calculator__label">Annual Tax</label>
               <div class="calculator__input-prepend input-prepend">
                 <span class="input-prepend__span">$</span>
-                <input id="annual-tax-input" class="calculator__input--text input-prepend__input" type="number" value="1000" />
+                <input id="annual-tax-input" class="calculator__input--text calculator__input--required input-prepend__input" type="number" value="1000" />
               </div>
-              <span class="calculator__input-error"></span>
+              <!-- <span class="calculator__input-error"></span> -->
             </div>
             <div class="calculator__item--group-item">
               <label class="calculator__label">Annual Insurance</label>
               <div class="calculator__input-prepend input-prepend">
                 <span class="input-prepend__span">$</span>
-                <input id="annual-insurance-input" class="calculator__input--text input-prepend__input" type="number" value="300" />
+                <input id="annual-insurance-input" class="calculator__input--text calculator__input--required input-prepend__input" type="number" value="300" />
               </div>
-              <span class="calculator__input-error"></span>
+              <!-- <span class="calculator__input-error"></span> -->
             </div>
           </div>
 
