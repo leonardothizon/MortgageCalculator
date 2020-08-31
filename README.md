@@ -9,3 +9,8 @@ npm install
 ```
 npm start
 ```
+
+### Run unit tests
+```
+npm test
+```
