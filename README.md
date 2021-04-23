@@ -1,5 +1,7 @@
 # MortgageCalculator
 
+A VanillaJS application to calculate mortgage.
+
 ## Project setup
 ```
 npm install
